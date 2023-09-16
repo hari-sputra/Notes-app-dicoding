@@ -1,10 +1,26 @@
 import React from "react";
+import NoteItem from "./NoteItem";
 
-function NoteAchieve() {
+function NoteAchieve({
+  title,
+  createdAt,
+  body,
+  id,
+  onDelete,
+  onArchive,
+  archived,
+}) {
   return (
-    <>
-      <h4 className="text-2xl mb-3">Achieve Notes</h4>
-    </>
+    <div className="mb-5">
+      <NoteItem
+        title={title}
+        createdAt={createdAt}
+        body={body}
+        onDelete={() => onDelete(id)}
+        onArchive={() => onArchive(id)}
+        archived={archived}
+      />
+    </div>
   );
 }
 

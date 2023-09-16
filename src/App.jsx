@@ -15,26 +15,46 @@ class App extends Component {
       title: "",
       body: "",
       showAlert: false,
+      titleAlert: "",
+      search: "",
+      titleCount: 0,
     };
 
     this.onTitleChange = this.onTitleChange.bind(this);
     this.onBodyChange = this.onBodyChange.bind(this);
+    this.onSearchChange = this.onSearchChange.bind(this);
     this.onAddNote = this.onAddNote.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.onDeleteHandler = this.onDeleteHandler.bind(this);
+    this.onArchiveHandler = this.onArchiveHandler.bind(this);
   }
 
   onTitleChange(event) {
-    this.setState(() => {
-      return {
-        title: event.target.value,
-      };
-    });
+    const title = event.target.value;
+    const limit = 50;
+
+    if (title.length <= limit) {
+      this.setState(() => {
+        return {
+          title: event.target.value,
+          titleCount: title.length,
+        };
+      });
+    }
   }
 
   onBodyChange(event) {
     this.setState(() => {
       return {
         body: event.target.value,
+      };
+    });
+  }
+
+  onSearchChange(event) {
+    this.setState(() => {
+      return {
+        search: event.target.value,
       };
     });
   }
@@ -47,7 +67,7 @@ class App extends Component {
             id: +new Date(),
             title,
             body,
-            archieved: false,
+            archived: false,
             createdAt: new Date(),
           },
           ...prevState.notes,
@@ -64,22 +84,51 @@ class App extends Component {
     this.onAddNote({ title: this.state.title, body: this.state.body });
     document.getElementById("addModal").close();
 
-    this.setState({ showAlert: true });
+    this.setState({ showAlert: true, titleAlert: "Note Added Successfuly!" });
 
     setTimeout(() => {
       this.setState({ showAlert: false });
     }, 2000);
   }
 
+  onDeleteHandler(id) {
+    const notes = this.state.notes.filter((note) => note.id !== id);
+    this.setState({
+      notes,
+      showAlert: true,
+      titleAlert: "Note Deleted Successfully!",
+    });
+
+    setTimeout(() => {
+      this.setState({ showAlert: false });
+    }, 2000);
+  }
+
+  onArchiveHandler(id) {
+    const updatedNotes = this.state.notes.map((note) => {
+      if (note.id === id) {
+        return { ...note, archived: !note.archived };
+      }
+      return note;
+    });
+
+    this.setState({
+      notes: updatedNotes,
+    });
+  }
+
   render() {
+    const filteredNotes = this.state.notes.filter((note) =>
+      note.title.toLowerCase().includes(this.state.search.toLowerCase())
+    );
     return (
       <div className="min-h-screen my-10">
-        {this.state.showAlert && <Alert title={"Note Added Successfuly!"} />}
+        {this.state.showAlert && <Alert title={this.state.titleAlert} />}
         <div className="flex justify-center mb-4">
           <h1 className="text-white text-5xl">Notes App</h1>
         </div>
         <div className="flex justify-center items-center min-h-screen">
-          <div className="card w-[50%] bg-base-100 shadow-xl">
+          <div className="card w-[50%] bg-base-100 shadow-xl z-10">
             <div className="card-body">
               <div className="flex justify-end">
                 <Button
@@ -97,6 +146,7 @@ class App extends Component {
                         placeholder={"Title"}
                         value={this.state.title}
                         onChange={this.onTitleChange}
+                        character={`Character Limit: ${this.state.titleCount} / 50`}
                       />
                       <textarea
                         className="textarea textarea-primary w-full"
@@ -108,8 +158,16 @@ class App extends Component {
                   }
                 />
               </div>
-              <Input placeholder={"Search..."} />
-              <NoteList notes={this.state.notes} />
+              <Input
+                placeholder={"Search..."}
+                value={this.state.search}
+                onChange={this.onSearchChange}
+              />
+              <NoteList
+                notes={filteredNotes}
+                onDelete={this.onDeleteHandler}
+                onArchive={this.onArchiveHandler}
+              />
             </div>
           </div>
         </div>

@@ -2,8 +2,8 @@ import React from "react";
 
 function Alert({ title, style = "alert-success" }) {
   return (
-    <div className="flex justify-end me-4">
-      <div className={`alert ${style} fixed w-[25%]`}>
+    <div className="flex justify-end me-4 z-50">
+      <div className={`alert ${style} fixed w-[20%]`}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="stroke-current shrink-0 h-6 w-6"

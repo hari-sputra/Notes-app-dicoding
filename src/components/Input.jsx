@@ -1,19 +1,17 @@
-import React, { Component } from "react";
+import React from "react";
 
-class FormInput extends Component {
-  render() {
-    return (
-      <div className="form-control w-full mb-4">
-        <input
-          placeholder={this.props.placeholder}
-          className="input input-bordered input-primary w-full"
-          onChange={this.props.onChange}
-          value={this.props.value}
-        />
-        <span>{this.props.character}</span>
-      </div>
-    );
-  }
+function FormInput({ placeholder, onChange, value, character }) {
+  return (
+    <div className="form-control w-full mb-4">
+      <input
+        placeholder={placeholder}
+        className="input input-bordered input-primary w-full"
+        onChange={onChange}
+        value={value}
+      />
+      <span className="text-xs mt-1">{character}</span>
+    </div>
+  );
 }
 
 export default FormInput;
