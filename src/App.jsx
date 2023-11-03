@@ -125,10 +125,10 @@ class App extends Component {
       <div className="min-h-screen my-10">
         {this.state.showAlert && <Alert title={this.state.titleAlert} />}
         <div className="flex justify-center mb-4">
-          <h1 className="text-white text-5xl">Notes App</h1>
+          <h1 className="text-white text-3xl md:text-5xl">Notes App</h1>
         </div>
         <div className="flex justify-center items-center min-h-screen">
-          <div className="card w-[50%] bg-base-100 shadow-xl z-10">
+          <div className="card w-[90%] md:w-[70%] lg:w-[50%] bg-base-100 shadow-xl z-10">
             <div className="card-body">
               <div className="flex justify-end">
                 <Button
